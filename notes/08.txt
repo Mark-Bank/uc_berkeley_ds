@@ -59,3 +59,17 @@ Doubly-Linked Lists
   - implementation may make use of a sentinel
 
     - a special node that does not represent an item
+
+
+Invariants of Doubly-Linked List via sentinel
+
+  1 for any DList d,      d.head != null
+  2 for any DListNode x,  x.next != null
+  3 for any DListNode x,  x.prev != null
+  4 for any DListNode x,  if    x.next == y,
+                          then  y.prev = x
+  5 for any DListNode x,  if    x.prev == y,
+                          then  y.next = x
+  6 for any DList d,      d.size == the # of DListNodes in the list, discounting the sentinel
+  
+  7 for an empty DList d, sentinel node's prev & next point to itself

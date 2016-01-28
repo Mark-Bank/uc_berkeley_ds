@@ -1,4 +1,6 @@
 /* per lecture 8
+ * sentinel-based impl
+ * (not implemented completely)
  */
 
 public class DListNode {
@@ -34,10 +36,8 @@ public class DListNode {
 
 public class DList {
   private DListNode head;
-  private DListNode tail;
   private int size;
 
-  // a fantastic way to represent an empty SList, eh?
   public DList() {
     head = null;
     size = 0;
