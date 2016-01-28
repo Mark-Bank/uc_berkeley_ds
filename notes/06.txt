@@ -1,0 +1,125 @@
+Automatic array construction
+
+    int[][] table = new int[x][y];      // creates x arrays of y ints
+
+  - Initializers
+
+    Human[] b = {kayla, rishi, new Human("Paolo")};
+    int[][] c = {{7,3,2},
+                 {x},
+                 {8, 5, 0, 0},
+                 {y + z, 3}};
+
+    int[] a, b, c;                      // all variables reference arrays
+    int a[], b, c[][];                  // c-style declaration, where each varaible is mapped to its specific dimension of array
+    int[] a, b[];                       // you're sick! but it works; a is 1-D, b is 2-D
+
+  - array of objects
+    when declaring an array of objects, Java will not create each object (must construct them in a loop)
+
+
+Do loop
+  - while loop, but with one guaranteed loop body execution
+  - useful to make entry point more natural
+
+  - e.g.
+
+    do {
+      s = keybd.readLine();
+      process(s);
+    } while (s.lenth() > 0);
+
+    //           read
+    // enter --> ^  |
+    //  exit <-- |  V
+    //          process
+
+  - trying to keep the loop's entry and exit points at the same location can be tough
+    e.g. with that example, process is called with that empty string that denotes loop termination
+
+  - break
+
+    break exits the innermost "switch" or loop enclosing the break
+
+    break DOES NOT break if bodies
+
+    //           read
+    // enter --> ^  | --> exit
+    //           |  V
+    //          process
+
+    (a "time-and-a-half" loop)
+
+    with no break statement:
+
+    s = keybd.readLine();
+    while (s.length() > 0) {
+      process(s);
+      s = keybd.readLine();
+    }
+
+    with break statement:
+
+    while (true) {
+      s = keybd.readLine();
+      if (s.length() == 0) {
+        break;                  // break statement exits loop in middle of loop body
+      }
+      process(s);
+    }
+
+    - pros/cons
+
+      - w/ no break
+        - duplicated code
+          - s = keybd.readLine() is duplicated, and logically, could be a much larger segment of code
+          - maintainability = worse (DRY violated)
+        - if delegating the "readLine()" notion to subroutine for DRY abidance, procedure loses sight of local variables
+
+      - w/ break
+        - obfuscated (loop isn't aligned with natural endpoint)
+
+
+More subtleties of flow control statements
+
+  - labels can be applied to conditions to denote where they are logically
+
+  - this can be intricate, so e.g.
+
+    test:
+      if (x == 0) {
+      loop:
+      while (i < 9) {
+        stuff: {
+          switch (z[i]) {
+          case 0: break;
+          case 1: break stuff;
+          case 2: break loop;
+          case 3: break test;
+          case 4: continue;
+          default: continue loop;
+          }
+          statement1();
+        }
+        statement2();
+        i++;
+        // location 3
+      }
+      statement4();
+    }
+    statement5();
+
+  - continue
+    - only applies to loops
+    - does not exit loop
+    - another iteration may commence (if condition of while/do/for is true)
+
+
+Constants
+
+  - 'final' keyword: value that can never be changed
+  - bad form: using magic numbers
+  - good form e.g.
+    public final static int FEBRUARY = 2;
+
+  - for an array x, x.lenght is a final field, hence its read-only nature
