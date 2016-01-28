@@ -1,0 +1,95 @@
+Heap
+
+  - stores all objects
+    - arrays
+    - class variables
+
+
+Stack
+
+  - stores all local variables
+    - parameters
+
+
+Method invocation
+
+  - when method is called, Java creates a stack frame (aka activation record)
+
+  - stack frame stores the parameters and local variables
+
+  - JVM maintains a stack of stack frames
+      - typ. capacity for a few thousands of stack frames
+      - need to watch recursive growth rate & consider iterative alternatives
+
+  - when method finishes, its stack frame is erased permanently
+
+
+Debug help
+
+  - in java.lang, Thread.dumpstack() method can be useful
+    (gives all the stack frames currently on the stack)
+
+
+Parameter passing
+
+  - all parameters are passed by value (copied)
+
+  - therefore, passing references to objects (e.g. variables of
+    non-primitive types) is the means of achieving other languages'
+    "pass by reference" paradigm
+
+
+Binary search
+
+  - search a sorted array for value "findMe"
+  - if we find "findMe", return its array index;
+  - otherwise, return FAILURE
+
+  - recursion base cases
+
+    1 findMe = middle element:  return its index (terminates)
+    2 subarray has length zero: return FAILURE
+
+  - runtime
+
+    - assuming n elements, each recurse divides n by 2
+      -> log(base=2, val=n)
+
+
+Logarithm review
+
+  - Data Structures and Algorithms in Java
+    - Goodrich, Tamassia
+    - Section 4.1.2 (logarithm overview)
+    - Section 4.1.7 (exponentiation overview)
+
+
+Scope & recursion
+
+  - scope of a variable: portion of program where the variable is accessible
+
+  - class variables
+
+    - in scope everywhere in class
+      (except when overwritten (shadowed) by local variables / parameters)
+
+    - can be fully qualified to access despite shadowing (disambiguates reference)
+      (un-shadowable)
+      - e.g. System.out
+
+    - if public, then they're in scope everywhere
+
+  - instance variables
+
+    - in scope in non-static methods of the class
+      (except when shadowed)
+
+    - can also be fully qualified
+      - e.g. kayla.name, this.item
+
+    - if public, then they're in scope everywhere
+
+  - local variables & parameters
+
+      - only in scope inside the method (and more specifically, the block) that defines them
+        (only for topmost stack frame)
