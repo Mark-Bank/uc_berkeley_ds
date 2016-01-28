@@ -1,0 +1,39 @@
+Lists
+
+  - raw arrays ain't no good
+
+    - inserting item at beginning or middle -> time proportional to length of array
+    - fixed length
+
+  - Linked List (recursive data type)
+
+    - comprised of nodes
+
+    - Node
+      - stores an item
+      - stores a reference to the next node
+
+    - advantages over array lists
+
+      - inserting item into middle of list -> constant time
+        *** IF you have a ref to the previous node
+
+      - no size limitation, aside from what the memory will fit
+
+    - disadvantages over array lists
+
+      - acquiring references to nth item -> time proportional to n
+        (vs. constant time with arrays)
+
+  - List class motivation
+
+      1 inserting new item at beginning of list
+
+        - no concept of the head of a list, so references to the list
+          must keep track of its composure on their own basis
+
+          - e.g. x, y both ref. a list, and x adds an item to the front; y don't know 'bout that
+
+      2 representing an empty list??
+
+        - can't just do null, as method calls will upset the java overlord
