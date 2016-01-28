@@ -1,0 +1,38 @@
+Classes
+  - contain fields (or, "instance variables")
+    - variables stored in objects
+  - declaration
+    - signified by 'class' keyword
+      - e.g. "class Human { public int age; public String name; }"
+  - constructors, in declaration, don't have return values because they return the object they construct
+  - once a constructor is defined, regardless of its parameters, it negates the java-provided default constructor
+  - 'this'
+    - invoking an object's method implicitly passes an extra parameter: this
+    - 'this' is the object whose method is invoked
+    - parameters and local variables take precedence in methods, so 'this' is used to fetch fields
+    - its value cannot be changed (would trigger a compiler error)
+
+Static
+  - keyword
+  - it denotes the variable it applies to is shared by the entire class of objects
+  - i.e. 1 static variable per class, not per object
+  - aka "class variable" (as opposed to objects' "instance variable" titling)
+  - can be referred to outside of the class (e.g. Humans.numberOfHumans)
+  - can apply to methods
+    - does not implicitly take an object as a parameter
+    - (there is no 'this')
+    - useful when methods have no use referring to a particular object
+    - e.g. printHumanCount()
+  - main method is always static since at initial run, prog has no objects to reference
+  - in static methods, THERE IS NO 'THIS'!!!!!
+
+Lifetimes of variables
+  - local variables
+    - (those declared inside methods)
+    - they die when the method concludes
+  - instance variables
+    - (non-static fields)
+    - last as long as their object exists (as long as there exists a reference to reach that object via)
+  - class variables
+    - (static fields)
+    - last as long as the program is running
