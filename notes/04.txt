@@ -1,0 +1,128 @@
+Primitive types
+  - byte  8-bit  integer [-128 ... 127]
+  - short 16-bit integer [-32768 ... 32767]
+  - int   32-bit integer [ -2147483648 ... 2147483647] i.e. 2 billion
+  - long  64-bit integer [......]
+    - should be the default go-to, rather than int, since 
+  - float   32-bit floating point number
+  - double  64-bit floating point number
+  - boolean ["true", "false"]
+  - char    [a character]
+
+  - explicit primitive type specification
+    - overrides default
+    - defaults: int and double
+    - long x  = 124L;
+    - float f = 18.9f;
+
+Object vs Primitive types
+
+  - contains... what?
+    - obj:  ref
+    - prim: value
+
+  - how defined?
+    - obj:  class definition
+    - prim: built into Java
+
+  - how created?
+    - obj:  'new' keyword
+    - prim: built into Java; e.g.: "6", "3.4", "true"
+
+  - how initialized?
+    - obj:  constructor
+    - prim: default (usually zero)
+
+  - how used?
+    - ojb:  methods
+    - prim: operators; e.g.: "+", "*"
+
+Operators for primitive numbers
+  - negation        -x
+  - addition        x+y
+  - subtraction     x-y
+  - multiplication  x*y
+  - division        x/y (dividing int by int -> fractional part dropped)
+  - remainder       x%y (integer only, plz)
+
+  - java.lang's Math class
+    - absolute value    Math.abs(x);
+    - square root       Math.sqrt(x);
+    - sine              ...
+
+  - Integer class
+    - parse int         Integer.parseInt("1984");
+
+  - Double class
+    - parse double      Double.parseDouble("3.14");
+
+
+Type issues
+
+  - ints can be assigned to variables of longer types
+    - e.g.
+      int i = 43;
+      long l = 43L;
+      l = i;          // fine
+
+  - assigning to shorter types freaks Java out
+    - e.g.
+      i = l           // compiler error
+
+  - casting
+      i = (int) l;
+
+      double d = 23.7;
+      float f  = (float) d;
+
+      d = f;          // fine
+
+
+Boolean value truth table
+
+  a | b | a && b | a || b | !a
+ -------------------------------
+  f | f | false  | false  |  t
+  f | t | false  | true   |  t
+  t | f | false  | true   |  f
+  t | t | true   | true   |  f
+
+
+Comparison operators
+
+  ==  equivalence 
+  >   greater than
+  >=  greater than or equal to
+  <   less than
+  <=  less than or equal to
+  !=  non-equivalence
+
+
+Conditionals
+
+  - if-then-else clauses can be...
+    - nested        (e.g. if statement inside an if statement)
+    - daisy-chained (e.g. else immediately followed by another if)
+
+  - switch statements
+    - e.g.
+      switch (month) {
+      case 2:
+        days = 28;
+        break;          // jump to end of the switch clause
+      case 4:
+      case 6:
+      case 9:
+      case 11:
+        days = 30;      // adjoining cases
+        break;
+      default:          // executed in the event no case was realized
+        days = 31;
+        break;
+      }
+
+
+Return
+    - keyword causing a method to end immediately (control returns to the calling method)
+    - provides means of delivering a specific value from the function
+    - "function" in Java: a method whose return value is not void (it returns something)
