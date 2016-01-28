@@ -1,0 +1,61 @@
+Privacy
+
+  - private method or field: invisible and inaccessible to other classes
+
+  - privacy motivation
+
+    1 to prevent data from being corrupted by other classes
+    2 to enhance impl's flexibility by preventing other classes from depending on its details
+
+
+Interface
+
+  - prototypes for public methods (occasionally, public fields)
+  - descriptions of those public methods' behaviors (in plain English)
+
+
+Abstract Data Type (ADT)
+
+  - a class (or multiple classes) with a well-defined interface
+  - ... whose implementation details are hidden from other classes
+  - ADTs allow enforcement of invariants
+  - not all classes are ADTs (some just store data with no invariants)
+
+
+Invariant
+
+  - fact about a data structure that is always true (sans bugs!)
+  - e.g. a Date object always representing a valid date
+
+
+The SList ADT
+
+  - another advantage of the SList class: invariant enforcement
+
+      1 size field is always correct
+        (size == cardinality of items reachable by beginning at head and following next's)
+
+      2 list is never circularly linked
+
+  - this enforcement exists ONLY BECAUSE only SList methods operate on the lists
+
+      - the fields of SList (head, size) cannot be tampered with because they are private
+      - individual nodes cannot be tampered with because no SList method returns an SNode
+
+
+Doubly-Linked Lists
+
+  - insertion/deletion at front of an SList is easy,
+    but @ end of an SList, things are tougher
+
+  - I mean, don't you want traversal in either direction?
+
+  - I won't continue to elaborate on the motivation of Doubly-Linked lists
+
+  - They're just great. They beat out SLists 95% of the time
+
+  - insert/delete items at both ends -> time proportional to constant
+
+  - implementation may make use of a sentinel
+
+    - a special node that does not represent an item

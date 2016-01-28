@@ -1,27 +1,28 @@
-/* per lecture 7, 8
+/* per lecture 8
  */
 
-public class SListNode {
+public class DListNode {
   Object item;
-  SListNode next;
+  DListNode next;
+  DListNode prev;
 
-  public SListNode(Object item, SListNode next) {
+  public DListNode(Object item, DListNode next) {
     this.item = item;
     this.next = next;
   }
 
-  public SListNode(Object item) {
+  public DListNode(Object item) {
     this(item, null); // constructor call
   }
 
   public void insertAfter(Object item) {
-    next = new SListNode(item, next); // note the differences in next
+    next = new ListNode(item, next); // note the differences in next
                                      // given its place on both sides of asgn. op.
                                      // (old val used in constructor, new val
                                      //  pulled from constructor's resultant obj.)
   }
 
-  public SListNode nth(int position) {
+  public ListNode nth(int position) {
     if (position == 1) {
       return this;
     } else if ((position < 1) || (next == null)) {
@@ -31,12 +32,13 @@ public class SListNode {
     }
 }
 
-public class SList {
-  private SListNode head;
+public class DList {
+  private DListNode head;
+  private DListNode tail;
   private int size;
 
   // a fantastic way to represent an empty SList, eh?
-  public SList() {
+  public DList() {
     head = null;
     size = 0;
   }
