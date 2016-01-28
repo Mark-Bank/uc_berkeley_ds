@@ -1,0 +1,66 @@
+Objects and Methods
+
+  $ String s1 = "Yow!"; // s1[-]--->[Yow!]
+                        // (syntactic sugar: combine declaration and assignment)
+
+  $ String s2 = s1;     // s1[-]--->[Yow!]<---[-]s2
+                        // s1 and s2 reference the same object
+
+  $ s2 = new String(s1); // s1[-]--->[Yow!] s2[-]--->[Yow!]
+                         // copy constructor enables s1 and s2 to ref. dif. objs w/ same data
+
+  - Strings are immutable
+
+  - constructors
+
+    - new String() constructs empty string (contains no characters)
+    - "whatever" constructs string containing the characters in the quote
+    - new String(str) takes an argument, str, and copies the chars contained in str
+
+    - constructors always have the same name as their class (except for data enclosed in quotes, where Java Strings those)
+    - constructors (except for quote data) always require the 'new' keyword
+
+  $ s2 = s1.toUppercase(); // s2[-]--->[YOW!]
+
+  $ s3 = s2.concat("!!");  // s3[-]--->[YOW!!!]
+  $ s3 = s2 + "!!";        // java implicitly calls concat()
+
+  $ s4 = "*".concat(s2).concat("*");
+
+Java I/O Classes
+
+  - Objects in System class interact with a user
+
+  - System.out is a PrintStream object that outputs to the screen
+  - System.in is an InputStream object that reads from the keyboard
+    - These statements are actually shorthand for "System.blah is a variable that references an xStream object"
+
+  - readLine method is defined for BufferedReader objects
+
+
+  - to construct a BufferedReader, construct an InputStreamReader
+  - to construct an InputStreamReader, construct an InputStream
+  - to construct an InputStream, System.in is one!
+
+  - InputStream reads raw bitstreams
+  - InputStreamReader composes those bitstreams into characters (typ. 2 bytes long)
+  - BufferedReader composes those characters into entire lines of text
+
+  - this composure is based on modularity (separate objects for each logical step, so they are flexible to internal/external change)
+
+Sample program:
+
+import java.io.*;
+
+class SimpleIO {
+  public static void main(String[] arg) throws Exception {
+    BufferedReader keyboard = new BufferedReader(
+      new InputStreamReader(System.in));
+    System.out.println(keyboard.readLine());
+  }
+}
+
+//end program
+
+  - to use Java libraries other than java.lang, you must import them
+  - a Java program always begins at a method called main

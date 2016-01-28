@@ -1,0 +1,47 @@
+Object-oriented programming
+  - Object
+    - repository of data
+  - Class
+    - type of object
+  - Method
+    - procedure/function that operates on particular type of object (or class)
+  - Inheritance
+    - classes can inherit properties from more general classes
+    - e.g. ShoppingList inherits from List the property of storing a sequence of items
+  - Polymorphism
+    - one method call can work on several different classes of objects
+      even if the classes need different implementations
+    - e.g. "addItem() on every kind of List, even though adding
+      item to ShoppingList is different from adding item to ShoppingCart
+  - Object-oriented
+    - each object knows its own class & methods
+    - e.g. each ShoppingList and ShoppingCart knows which addItem() it uses
+
+Java
+  - fetching classes
+    - use one defined by someone else (lots exist in Java)
+    - create one yourself
+  - must declare any variable before using it
+  - e.g.
+    $ String myString; // myString[] <- variable in memory (nothing there initially)
+    $ myString = new String(); // constructor that creates a new String object
+                               // assignment operator causes myString to reference the new String object
+                               // myString[-]---->[  ] (a string object)
+  - differences between Java & Scheme
+    1 everything in Java has a type, and that type must be declared
+    2 things must be compiled
+
+          Scheme:                         Java:
+      scheme program (.scm)           java program (.java)
+            |                               |
+            | eval                          | javac
+            |                               |
+            V                               V
+         answer                         .class files
+                                            |
+                                            | java (JVM)
+                                            |
+                                            V
+                                         answer
+  - primitive types
+    - variables with a primitive type are not references to objects
