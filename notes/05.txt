@@ -1,0 +1,33 @@
+While loop
+  - the body is executed repeatedly, until the condition is no longer satisfied
+  - the condition is more formally called the "loop condition" (& body "loop body")
+
+
+For loop
+  - syntax: for(initialize; test; next) { statements; }
+  - the structure helps clarify the loop's logic
+
+
+Arrays
+  - every array is an object consisting of an indexed list of variables
+  - each numbered variable can be a primitive type or a reference
+  - in memory e.g.
+             0 1 2 3
+    c[-]--->[b|l|u|e]
+
+  - syntax
+    char[] c;           //reference to array (any length) of chars
+    c = new char[4];    //woo!
+    c[0] = 'b';
+    c[3] = 'e';
+    c[4] = 's';         //Java's going to be angry when it sees what you've done
+                        // runtime error - array index out of bounds exception
+
+    * char c[]; is also a valid declaration. those brackets can go both ways
+
+  - c.length - field indicating length of array (read-only; writing to it -> compile-time error)
+
+
+Multi-dimensional arrays
+
+  - 2 dimensional: an array of references to arrays
