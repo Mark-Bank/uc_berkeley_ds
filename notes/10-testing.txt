@@ -1,0 +1,114 @@
+Equals
+
+  - equals(): a method that every class has (even if not explicitly defined)
+
+  - default behavior checks if 2 references point to the same obj.
+    e.g. r1.equals(r2); // true if r1 and r2 point to same obj., false if otherwise
+
+  - typically overriden to compare equality of content, not of object instance
+    e.g. String: s1 - "Hi" -> s1.equals("Hi") -> true
+    * s1 == "Hi" -> false
+
+
+Equality levels
+
+  1 Reference equality
+    equals() does exactly what == does (checks if ref'd obj's are the same obj.)
+
+  2 Shallow structural equality
+    fields are ==
+
+  3 Deep structural equality
+    recursive check of fields' equality
+
+  4 Logical equality
+    semantic perspective, looking into nature of fields
+    e.g. Fractions 1/3 and 2/6  are logically equal
+    e.g. Sets {a, b} and {b, a} are logically equal
+
+
+Testing
+
+  1 Modular testing
+
+    - test drivers
+
+      - they call the code & check the results
+      - location
+        - often put in main() method, since a class's main() is rarely the entry point of the program
+        - if class *is* entry point for program, need an explicit test driver
+
+        e.g.
+
+          public class MyProgram {
+            public static void TestDriver() { ... //test code ... } // test code resides here for access to private attributes
+          }
+
+          public class TestMyProgram {                              // separate class for invoking the test driver method
+            public static void main(String[] args) {                // runnable via 'java TestMyProgram'
+              MyProgram.TestDriver();
+            }
+          }
+
+    - stubs 
+
+      - bits of code called by the code being tested
+      - typ. short
+
+      - motivation
+
+        1 a tested method must call another, non-existing method
+          so stub fills in for that missing method
+
+        2 a bug is out there, but its location is unknown
+          replace the callee with a stub to find if the bug lies in the calling method or the called method
+
+        3 good hook for simulating test-case data (especially regarding exceptional edge-cases)
+          and hey, it's repeatable
+
+  
+  2 Integration testing
+
+    - testing interactions between modules
+
+    - best way to head off the need for this
+      - define interfaces well
+      - ensure no ambiguity exists in the descriptions of the interfaces' behaviors
+
+    - learn to use the Java debugger
+
+
+  3 Result verification
+
+    - data structure integrity checkers
+      - inspect the data structure to determine upholdance of invariants
+
+    - algorithm result checkers
+      e.g. after a sorting algorithm, checking that each number in a list is <= the next
+
+
+  4 Regression testing
+
+    - rest suite coded up that can be re-run every time changes are made to the code
+
+    - checks that the changes have not modified the desired behaviors of the program
+
+    - good because it localizes where bugs were introduced (the diff between prev and cur)
+
+    - good because it notifies early the programmer who caused the bug (code diff still fresh in their mind)
+
+
+Assertion
+
+  - code that tests an invariant or result
+
+  e.g. assert(x == 3); // checking at a point where it's assumed x == 3 that indeed, x == 3
+  e.g. assert(list.size = list.countLength()): "wrong SList size: " + list.size;
+
+    - will print out a colon-preceded string as the error message
+
+  - assertions can be switched off and on
+    $ java -ea SList # assertions enabled
+    $ java -da SList # assertions disabled
+
+  - assertion invocations should never contain logic the program needs to run normally (since their execution is not guaranteed)
