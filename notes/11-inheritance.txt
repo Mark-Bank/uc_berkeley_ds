@@ -1,0 +1,99 @@
+Inheritance
+
+  - subclasses (key to oop)
+
+    - means of modifying the superclass it inherits from
+
+      1 declare new fields
+
+      2 declare new methods
+
+      3 override old methods with new implementations
+
+
+    - cannot override constructors
+
+    - triggered via 'extends' keyword
+
+
+  - constructors
+
+    - e.g. with subclass TailList, superclass SList
+
+      TailList(); // first, java executes SList() constructor
+
+  - example creation
+
+    SList s = new TailList(); // great!
+
+    TailList t = new SList(); // no, you jerk! We wanted a tail.
+                              // any anticipation of a TailList will be >:(
+                              // if you give it an SList only
+
+
+Protected
+
+  - privacy keyword
+
+  - private actually hides the field/method it applies to from subclasses
+
+  - demotes privacy of fields/methods s.t. subclasses can access them
+
+
+Class hierarchies
+
+  - everything in Java inherits from Object (it is inexorable)
+
+  - subclassing is transitive (if A sub's B, B sub's C, then A sub's C)
+
+  - tree typology is enforced; no cycles in inheritance scheme
+
+
+Dynamic method lookup
+
+  - every X subclassing Y is, in fact, a Y (liskov sub. principle)
+
+
+  - static type
+
+    - the type of a variable given to it at its declaration
+
+  - dynamic type
+
+    - the type of a variable pulled from the class it references
+
+    - can change dynamically
+
+
+  - example differentiating static and dynamic type
+
+      SList s = new TailList();
+
+      - s's static type:  SList (this is what we told Java s is)
+
+      - s's dynamic type: TailList (this is what s is pointing to)
+
+
+  - when an overridden method is invoked,
+    Java calls the method for the object's dynamic type
+
+    - Java doesn't heed the static type
+
+    - called dynamic method lookup
+
+    - e.g.
+
+      // dynamic method lookup leveraging subclass's overridden method
+      SList s = new TailList();
+      s.insertEnd(obj);             // invokes TailList.insertEnd()
+
+      // dynamic method lookup just going the general route, as static type == dynamic type
+      s = new SList();
+      s.insertEnd(obj);             // invokes SList.insertEnd()
+
+    - motivation
+
+      - e.g. w/ a method written to sort an SList, via only method calls (no field manip.)
+        -> TailList can leverage that written method
+
+      - Liskov sub. principle can be leveraged

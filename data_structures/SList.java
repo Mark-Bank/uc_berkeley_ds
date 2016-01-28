@@ -1,4 +1,4 @@
-/* per lecture 7, 8
+/* per lecture 7, 8, 10
  */
 
 public class SListNode {
@@ -16,9 +16,9 @@ public class SListNode {
 
   public void insertAfter(Object item) {
     next = new SListNode(item, next); // note the differences in next
-                                     // given its place on both sides of asgn. op.
-                                     // (old val used in constructor, new val
-                                     //  pulled from constructor's resultant obj.)
+                                      // given its place on both sides of asgn. op.
+                                      // (old val used in constructor, new val
+                                      //  pulled from constructor's resultant obj.)
   }
 
   public SListNode nth(int position) {
@@ -51,5 +51,25 @@ public class SList {
       head = head.next;
       size--;
     }
+  }
+
+  public boolean equals(SList other) {
+    if (size != other.size) {
+      return false;
+    }
+
+    SListNode n1 = head;
+    SListNode n2 = other.head;
+
+    while (n1 != null) {
+      if (! n1.item.equals(n2.item)) {
+        return false;
+      }
+
+      n1 = n1.next;
+      n2 = n2.next;
+    }
+
+    return true;
   }
 }
