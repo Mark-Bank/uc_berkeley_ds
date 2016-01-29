@@ -156,3 +156,47 @@ Java interfaces
   - therefore, interfaces contain only method prototypes and constants
 
   - motivation: a sort of means to achieve multiple inheritance (a weak version)
+
+  e.g.
+
+    public interface Nukeable {         // must be in Nukeable.java, as the case with a Java class
+      public void nuke();
+    }
+
+    public interface Comparable {       // defined in java.lang (typ. used for general sorting algo's)
+      public int compareTo(Object o);   // the method one must define to meet the Comparable interface's definition
+    }
+
+    public class SList extends List implements Nukeable, Comparable {
+
+      // methods achieving your SList's contractual obligations
+      // e.g.
+      public void nuke() {
+        head = null;
+        size = 0;
+      }
+    }
+
+
+  - interfaces can be the static type of a variable
+
+    e.g.
+
+      Nukeable n = new SList();
+
+      Comparable c = (Comparable) n;    // cast necessary, as not every Nukeable is a Comparable
+
+
+  - sub-interfaces can have multiple super-interfaces
+
+    e.g.
+
+      public interface NukeAndCompare extends Nukeable, Comparable { ... }
+
+  - syntactic diff. btwn subclassing/extension/sub-interfacing/etc.....
+
+      - class inheriting interface:       'implements'
+
+      - class inheriting another class:   'extends'
+
+      - interface inheriting interface:   'extends'

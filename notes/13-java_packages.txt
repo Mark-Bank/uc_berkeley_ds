@@ -1,0 +1,112 @@
+Source code file behavior
+
+  e.g.
+
+    given SList.java: {SList class, Nukeable interface}
+    javac SList.java -> {SList.class, Nukeable.class}
+
+    - though the 1 java file contains both constructs, compilation distributes them into separate .class files
+
+  - public classes must be declared in files named after their class
+
+
+Java packages
+
+  - package: collection of classes, Java interfaces, & sub-packages
+
+  - typ. cooperate to provide 1 or whatnot ADT, with a willingness to interdepend because author tends to be same
+
+  - advantages
+
+    1 packages can contain hidden classes not visible outside package
+
+    2 classes can have package-only visibility for fields & methods
+
+    3 dif. packages can have classes with same name
+
+
+Package use
+
+  - as fully qualified name: java.lang.System.out.println("big 'ole name right there");
+
+  - as via 'import' keyword: import java.io.File;  // File now visible (needn't qualify it further than that)
+
+    - can import entire package: import java.io.*; // everything in java.io package now visible
+
+  - every program implicitly imports java.lang.*
+
+  - name collision req's qualifying at a high-enough level to disambiguate references
+
+    e.g.
+
+      java.awt.Frame.add(photo.Frame.canvas);
+
+  - Java must be aware of where to locate package contents
+
+    e.g.
+
+      - must know for x.y.z.Class where x/y/z/Class.class is located
+
+      - under Unix, set environmental variable named CLASSPATH to include path to relevant directories
+
+        - colons separate directories
+
+        - printenv CLASSPATH # reveals value of CLASSPATH
+
+
+Building packages
+
+  - e.g.
+
+    // in list/SList.java
+
+    package list;
+
+    public class SList {
+      SListNode head;
+      int size;
+    }
+
+
+    // in list/SListNode.java
+
+    package list;
+
+    class SListNode {
+      Object item;
+      SListNode next;
+    }
+
+
+  - 'package' protection = default for package-rooted class attributes
+
+      - between private and protected (more private than protected, less private than private itself)
+      - visible to any class in same package
+      - invisible to anything outside package (i.e. not in the package's directory)
+
+      - files outside only see public classes/methods/fields
+        - except if they're a subclass of a package class
+        - in that case, they have visibility for protected entities
+
+  - 'package' classes can go in any *.java file
+
+    i.e. they needn't exist in their own separate file named after their class
+
+
+Compilation & running
+
+  e.g.
+
+    $ javac -g list/SList.java      # must be outside the package dir; -g sets debug option
+    $ java list.SList               # runs the test code
+
+    $ javac -g list/*.java heap/*.java *.java # multiple compilation args allowed for javac (which det's interdependencies among args)
+
+
+Protection level summary
+
+    term        visibility - in same package   |  in a subclass  |  in anywhere
+  1 'public'                      yes          |      yes        |      yes
+  2 'protected'                   yes          |      yes        |      ---
+  3 package                       yes          |      ---        |      ---
+  4 'private'                     ---          |      ---        |      ---
