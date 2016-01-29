@@ -1,0 +1,147 @@
+Finally
+
+  - 'finally' keyword
+
+  - optional part of try clause
+
+  e.g.
+
+    try {
+      statementX;
+      return 1;
+    }
+    catch (SomeException e) {
+      e.printStackTrace();
+      return 2;
+    }
+    finally {
+      // executed no matter the outcome of the try block
+      file.close();
+      return 3;
+    }
+
+  - if 'try' statement begins executing
+
+    - 'finally' clause will be executed at the end, no matter what
+    - so, in above example, finally's return statement makes try and catch's returns pointless
+
+    - again, based on e.g. above, possible flows
+
+      1 statementX causes SomeException
+        a) 'catch'    clase executes
+        b) 'finally'  clause executes
+
+      2 statementX causes OtherException
+        a) 'finally'  clause executes
+        b) exception continues down the stack in search of a catcher's mitt
+
+
+Exceptions on top of Exceptions
+
+  - if a catch clause throws an Exception, the program behaves as you'd expect
+    - 'finally' does still get executed before the Exception begins its journey
+
+  - also, any nesting of try/catch/finally is permitted
+    - if finally clause throws an Exception
+      - if no catch block nested in there, it replaces the older Exception
+      - this does interrupt (permanently) the execution of the finally clause
+
+
+Exception constructors
+
+  - most Throwables have at least 2 constructors
+    1 one that takes no parameters
+    2 one that takes a String
+
+  e.g.
+
+    class MyException extends Exception {
+
+      public MyException() { super(); }
+
+      // String -> opportunity to represent error message
+      // printed if Exception propagates out of main() or if caught and manually printed earlier
+      public MyException(String s) { super(s); }
+    }
+
+
+Field shadowing
+
+  - a danger given the nature of inheritance
+
+  - super and sub classes can have a field of the same name
+
+    - not nice like method overriding
+      - dynamic method lookup makes use of dynamic type to select appropriate method
+      - but with shadowed field, *static* type used to select field
+
+  e.g.
+
+    class Super {
+      int x = 2;
+      int f() { return 2; }
+    }
+
+    class Sub extends Super {
+      int x = 4;
+      int f() { return 4; }
+      void g() {
+        int i;
+        i = this.x;             // i == 4
+        i = ((Super) this).x;   // i == 2
+        i = super.x             // i == 2 - shorthand for ((Super) this)
+    }
+
+
+    Sub sub = new Sub();
+    Super supe = sub;       // sub[-]---> [ sub.x[4] super.x[2] ] <---[-]supe
+
+    int i;
+
+    i = supe.x;             // i == 2
+    i = sub.x;              // i == 4
+
+    i = ((Supe) sub.x);     // i == 2
+    i = ((Sub) supe.x);     // i == 4
+
+
+    // as per dynamic method lookup, dynamic type of Sub yields that class's method
+
+    i = supe.f();           // i == 4
+    i = sub.f();            // i == 4
+
+    i = ((Supe) sub).f();   // i == 4
+    i = ((Sub) supe).f();   // i == 4
+
+
+Static methods
+
+  - follow same shadowing rules as fields
+  - they use the static type to determine what method to invoke
+  - this is because there is no referenced object whose dynamic type can be observed
+
+
+Final methods and classes
+
+  - 'final' keyword
+  - final methods can't be overridden
+  - final classes can't be extended
+
+  - attempting those -> compile-time error
+  - final methods can be invoked more quickly, because they won't depend on dynamic method lookup
+
+  - final methods can be used to override other methods, themselves
+
+
+Simplified for
+
+  - "for each" construct
+
+  e.g.
+
+    int[] array = {7, 12, 3, 8, 4, 9};
+    for (int i : array) {
+      System.out.print(i + " ");
+    }
+
+  - requires the object looped through implement the Iterable interface
