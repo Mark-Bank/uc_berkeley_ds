@@ -1,0 +1,158 @@
+Subtleties of inheritance
+
+  - given TailList subclassing SList, some example scenarios
+
+    1 new method in TailList called eatList()
+
+      TailList t = new TailList();
+      t.eatList();                      // fine
+
+      SList s = new TailList();
+      s.eatList();                      // compile-time error
+
+      - s is static-type'd as an SList
+      - java doesn't consider the dynamic type here
+        - the static type doesn't inherently contain an "eatList()" method
+        - therefore, dynamic method lookup is not leveraged to discover the proper method
+
+
+    2 assignment between variables
+
+      SList s;
+      TailList t = new TailList();
+
+      s = t;                            // fine
+      t = s;                            // compile-time error
+
+      - java doesn't consider the dynamic type here
+        - it just knows you're trying to give a more specific variable a more general object value
+        - it gets afraid, much like when it fears precision loss, that the good subclass bells 'n whistles will be lost
+        - casting makes all the difference
+
+      t = (TailList) s;                 // fine
+
+      s = new SList();
+      t = (TailList) s;                 // fine by Java, but of course, screwy (run-time error)
+
+      int x = t.nth(1).intValue();      // nth returns Object, whom intValue() is not defined for (compile-time error)
+
+      int x = ((Integer) t.nth(1)).intValue(); // fine (needs parentheses to cause precedence to deliver the valid syntax)
+
+      - CASTS CHANGE THE STATIC TYPE of an expression (not the static type of a variable)
+
+      - calling a method causes Java to invoke dynamic method lookup, which only considers the dynamic type
+
+
+    3 figuring out the type of an object
+
+      - instanceof operator returns the dynamic type of the invoking object
+        ** the operator has a lower-case 'o' in 'of'
+
+      if (s instanceof TailList) {      // false if f is null or doesn't reference a TailList or subclass of TailList
+        t = (TailList) s;
+      }
+
+
+Abstract classes
+
+  - denoted via keyword 'abstract' in class definition statement
+
+  - a class whose sole purpose is to be extended
+
+  - e.g. an ADT with no/an incomplete implementation
+
+  e.g.
+
+    public abstract class List {                          // note: while impl is incomplete, this remains an ADT
+
+      protected int size;
+
+      public int length() {
+        return size;
+      }
+
+      public abstract void insertFront(Object item);      // 'abstract' keyword mandates subclasses implement this method
+                                                          // provides visibility of this method for objects typed as Lists
+
+    }
+
+
+  - cannot be used to instantiate a List object
+
+  - can be used to declare a List variable (e.g. a reference that will point to a subclass of List)
+
+  e.g.
+
+    List myList;                        // fine
+    myList = new List();                // compile-time error
+
+
+  e.g.
+
+    public class SList extends List {
+
+      // inherits 'size' field
+
+      protected SListNode head;
+
+      // inherits 'length()' method
+
+      public void insertFront(Object item) {                // note lack of 'abstract' keyword, as it's a true implementation
+        head = new SListNode(item, head);
+        size++;
+      }
+
+    }
+
+  - non-abstract (sometimes 'concrete') classes' restrictions
+
+    - can't contain an abstract method
+    - can't inherit an abstract method without providing an implementation
+
+  - abstract methods leverage polymorphism
+
+    - callers needn't be considered from a dynamic-type perspective
+    - as long as they're concrete, their appropriate dynamic method impl. will be used
+
+    - e.g. a List sorter could, if abiding by List's interface, sort any type of List
+
+
+Subclasses of List
+
+  - SList, DList, TailList
+
+  - TimedList (records time spent doing operations)
+
+  - TransactionList (logs all changes on a disk in event of hard failures)
+
+  - module layering e.g.
+
+    [Application]
+          |
+          V
+    [ListSorter]
+          |
+          V
+     [List ADT]
+
+    - the application, not the list sorter, chooses what kind of list is used
+
+
+Java interfaces
+
+  - 'interface' keyword, 'implements' keyword
+
+  - different from the c.s. concept of "interfaces" (public method prototypes & corresponding behaviors)
+
+  - much like an abstract class, with 2 differences
+
+    1 while classes can only inherit from 1 class,
+      multiple interfaces can be implemented
+
+    2 Java interfaces lack features that abstract classes have
+      - can't implement any methods (must all be abstract)
+      - can't include any fields (except 'static final' constants)
+
+  - therefore, interfaces contain only method prototypes and constants
+
+  - motivation: a sort of means to achieve multiple inheritance (a weak version)
