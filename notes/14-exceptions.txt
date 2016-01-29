@@ -1,0 +1,127 @@
+Exceptions
+
+  - run-time error: Java "throws an exception" ...
+
+    - Exception is a class, so throwing one is throwing an object
+    - catching an Exception "prevents" the error, as it can be examined and handled to see how to proceed
+
+  - motivation
+
+    1 surviving errors
+      e.g.
+
+        a prog. that reads a file so it can respond to the contents
+        but oh no, file does not exist (or is otherwise inaccessible)
+
+        solution: print error message and proceed
+
+      - solution impl
+
+        - place code capable of causing the exception into a try block
+
+        e.g.
+
+          try {
+            f = new FileInputStream("xyz.fakefile");
+            i = f.read();
+          }
+          catch (FileNotFoundException e1) {          // actually a variable declaration
+            whine("Foiled!!!");                       // (of a static variable 'e1', which ref's the exception object thrown)
+          }
+          catch (IOException e2) {
+            f.close();
+          }
+          catch (Exception e3) {                      // global catcher (though there is 1 Exception more generic)
+          }
+
+      - execution: the 'try' block is executed
+        - if no exception is thrown, skip 'catch' clauses
+        - if an exception is thrown, seek first 'catch' clause that matches the type of exception thrown
+          - 'matching' -> exception is same class or subclass of the specified variable's type in the catch clause
+          - code executed inside 'catch' block called "exception handler"
+          - after exception handler concludes, skip over any remaining exception handlers
+
+
+    2 escaping a sinking ship
+
+      - throw your own exception
+
+      - must define own exception
+
+      e.g.
+
+        public class ParserException extends Exception { }    // albeit lacking new logic, does distinguish self by virtue of its class
+
+        public ParseTree parseExpression() throws ParserException {
+          ...
+          if (somethingWrong) {
+            throw new ParserExpression();
+          }
+          ...
+        }
+
+      - differences from return
+
+        1 needn't return anything (which helpful when logically, nothing exists to return)
+
+        2 exceptions can fly multiple methods down the stack until caught
+
+
+    - methods can be able to throw multiple exceptions
+
+
+e.g.
+
+  public ParseTree parse() throws ParserException, BadCodeException {
+    
+  }
+
+  public void compile() {
+    ParseTree p;
+    try {
+      p = parse();
+      p.toByteCode();
+    }
+    catch (ParserException e1) { }
+  }
+
+
+  - if a method on the top of the stack throws an exception,
+    java burns down the stack frames until it finds someone willing to catch the exception
+
+
+Checked v. unchecked
+
+  - Java distinguishes exceptions upon the basis of checked/unchecked
+
+  - Checked exceptions must be explicitly noted as thrown
+
+  - all exceptions inherit from the class Throwable
+
+  - Throwable has 2 direct children
+
+    1 Exceptions
+
+      e.g. RunTimeException (children: NullPointer, ArrayIndex...)
+           ParserException
+
+    2 Error
+
+      e.g. running out of memory
+
+      - typ. more serious than Exceptions
+
+
+  - unchecked exceptions are either RunTimeExceptions or Errors
+    
+    - per 'unchecked' categorization, don't require "throws" declaration
+    - this is because they are rather globally applicable
+
+
+  - options for when a method calls a method that throws a checked exception
+
+    1 catch the exception and handle it
+
+    2 allow it to propagate through the caller, which must in turn throw that exception, itself
+
+    - one of these must be chosen for the compiler to give your code the go-ahead
