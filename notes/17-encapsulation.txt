@@ -1,0 +1,74 @@
+Kluge
+
+  - a workaround. quick-and-dirty solution
+
+  - difficult to extend and maintain
+
+  - kluges often violate encapsulation
+
+
+Module
+
+  - set of methods that work together to perform some task
+
+  - modules and encapsulation
+
+    - modules are "encapsulated" if...
+
+      1 their implementation is hidden
+      2 they're accessible only through a documented interface
+
+      - data can ONLY go in and out through the module's interface
+
+  - ADTs are types of modules
+
+
+Encapsulation pros
+
+  1 the implementation of the module is independent of the functionality
+    - armed only with interface documentation, a new implementation can be developed
+
+  2 prevention of corrupting the module's internal data
+    - dramatically reduces debugging time
+
+  3 ADTs have the power to ensure their invariants are enforced
+
+  4 once interfaces are defined, programmers can work in teams
+    - parts can be developed independently
+
+  5 documentation and maintainability
+    - its behavior is much more clearly defined, so it is understandable by those who didn't write it
+
+
+Module interfaces
+
+  - serve as contracts between module writers
+  - specify how they will communicate
+
+
+Enforcing encapsulation
+
+  - most languages reqire self-discipline
+
+  - Java's packages & privacy levels
+    - though note: packages can often contain multiple modules
+      - e.g. when multiple modules operate on same class, convenient to store in 1 package
+
+
+Module conceptual size
+
+  - module  may contain  few or many methods
+  - module  may comprise several     classes
+  - class   may comprise several     modules
+  - package may contain  1 or many   modules
+
+  - so the motivation of module size: module is defined by clean interfaces
+    - whatever it takes to make its interface clean, that's what it should comprise
+
+
+Module interface documentation
+
+  - list the prototypes of methods visible to external callers
+  - behavior comment: describe every parameter and return value
+  - complete & unambiguous
+  - unusual & erroneous input / circumstances
