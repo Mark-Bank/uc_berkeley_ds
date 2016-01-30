@@ -1,0 +1,146 @@
+Dictionaries
+
+  - map key to value
+    i.e. map any set of discrete objects to any other such set
+
+  e.g. 2-letter words & their definitions
+
+    - 26x26 = 676 words
+
+      - store word references as array
+      - will contain gaps for non-defined words
+
+    - inserting a definition into the dictionary
+
+      - requires mapping a word to an index
+      - can generate unique index per word
+        - 'hash code'
+        - essentially treat it as a base 26, 2-digit number
+        - and mathematically convert that to base 10
+
+        - works great for 2-letter words
+        - array size grows exponentially vs word-length, however
+
+
+Hash tables
+
+  - n: number of keys (words) stored
+  - table of N buckets (N perhaps a bit larger than n)
+
+  - motivation: mapping a huge set of possible keys to a much smaller number of buckets
+
+    - must apply a compression function to each hash code
+      - hash: the term for that compression function
+
+    - simple way: h(hashCode) = hashCode mod N
+      - pretty random, though, so nearly guaranteed to have collisions
+
+  - collision: several keys hash to same bucket
+
+  -typ. sol. for collision: chaining
+    - each bucket references a linked list of entries mapped
+    - now that bucket becomes ambiguous, must store key in table with its associated value
+
+    e.g.
+
+      public Entry insert(key, value) {
+        compute the key's hash code ('hash' the key)
+        compress the hash code to determine its bucket
+        insert the entry into the bucket's chain
+      }
+
+      public Entry find(key) {
+        compute the key's hash code ('hash' the key)
+        compress the hash code to determine its bucket
+        search the bucket's chain for an entry containing the given key
+          if found
+            return the entry
+          else
+            does not exist
+            return null, perhaps
+      }
+
+      public Entry remove(key) {
+        Entry found = find(key)
+        if found != null
+          remove found from bucket's chain
+        return found
+      }
+
+
+    - given a possible attempt to add 2 different entries with the same key
+
+      1 can insert both
+        1a can return one arbitrarily, when sought
+        1b can return all matching, when sought (may be separate method)
+
+      2 can overwrite old value with new
+
+      - choice is dependent on application
+
+
+  - beware the possibility of references to objects in table where the references aren't managed by the table
+    - musn't get crazy and modify it (at least not its key)
+
+
+Hash table performace
+
+  - "load factor" : n/N
+    - 0.8 to 1.2 are decent ranges for load factor with regard to hash table's performance
+
+  - much ado about the length of the buckets' chains
+    - short chains -> ops take O(1) time
+    - load factor increases chains' lengths
+      - asymptotically, with n outpacing N's growth, takes THETA(n) time
+
+    - tends to be easy to go with a really big N
+      - does cost time proportional to N to initialize
+      - does consume more memory
+
+
+  - hash code & compression must also be 'good'
+
+    - key --------> hashcode -------------> [0, N-1]
+            hash              compression
+                               function
+
+
+    - ideal: map each key to a random bucket
+      - evenly distribute entries amongst buckets
+
+
+Hash code
+
+
+Compression function
+
+  - bad e.g.
+
+    - keys: ints
+    - each int's hash code is just itself: hashCode(i) == i
+
+    - compression fn h(hashCode) = hashCode mod N
+    - N = 10,000 buckets
+
+    - issue: apps tend to generate data with strong patterns
+
+      e.g. keys being very typically divisible by 4
+        - h() ->  a table index also divisible by 4
+        - now 3/4 of the buckets are never used
+          N -> N/4
+          load factor just quadrupled
+
+  - that same compression fn is better if N is prime
+    - even if hashCodes typ. divisible by a particular number,
+      N being prime -> hashCode mod N not divisible by any particular number
+
+  - even better (and for even more obscure reasons):
+
+    - h(hashCode) = ((a * hashCode + b) mod p) mod N
+      where a, b, p are positive integers,
+            p is a large prime
+            p >> N
+
+      - the mod p operation scrambles the bits crafted by (a * hashCode + b) really well
+      - mod N gets it into your table
+      - N needn't be prime any longer, so that responsibility is relegated to an internal impl. detail
