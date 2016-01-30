@@ -1,0 +1,75 @@
+Big-Oh notation
+
+  - O(f(n)) is the set of ALL functions T(n) that satisfy:
+
+    there exist positive constants c and N s.t.
+    for all n >= N, T(n) <= cf(n)
+
+  - almost never includes positive constant factors of n
+
+  - serves as an upper bound to a function
+    - can indicate a function is speedy
+    - cannot indicate a function is slow (but hey, that's what Big-THETA is for)
+      e.g. n is a member of O(n^3), but that doesn't mean it's slow
+
+  - if function under consideration is a combination of other functions,
+    only the fastest-growing function need be considered
+
+    it highlights the dominating term
+
+
+Common Big-Oh sets
+
+  (sorted from smallest to largest)
+
+    function        common name
+    ----------      -----------
+    O(1)            constant
+  c O(log n)        logarithmic
+  c O(log^2 n)      log-squared
+  c O(n^.5)         root-n
+  c O(n)            linear
+  c O(nlog n)       n-log-n
+  c O(n^2)          quadratic
+  c O(n^3)          cubic
+  c O(2^n)          exponential
+  c O(e^n)          exponential (but far worse)
+  c O(n!)           factorial
+  c O(n^n)          satan
+
+
+Relative acceptabilities
+
+  - O(nlog n) and faster considered efficient
+  - n^7       and slower considered garbage
+
+  - what functions lie between might be ok
+    - can be dependent on n
+
+
+Warnings
+
+  1 keep c a constant
+    if you let c = n, you'd prove n^2 elOf O(n)
+
+  2 Big-Oh notation does not say what the functions *are*
+    it only explains a relatinship between 2 functions
+
+    - e.g. 47 + 18log n - 3/n elOf O(the worst-case running time)
+      that is fine
+
+  3 constant factors can matter depending on their location
+
+    - e.g. e^3n not elOf O(e^n)
+      (it's bigger by a factor of e^2n)
+
+  4 Big-Oh notation's simplifications can hide important realities
+
+
+Variations based on n
+
+  e.g. binary search on an array
+
+    - worst-case running time elOf O(log n)
+    - best-case  running time elOf O(1)
+    - memory use elOf O(n)
