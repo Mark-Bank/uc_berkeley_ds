@@ -22,14 +22,17 @@ public class HashStrings {
 
   private static final String IN_FILE = "resources/message.txt";
 
+  // reads in IN_FILE's words, adds them to a hash table, and prints table's contens
   public static void main(String[] args) throws IOException {
 
+    // TODO: String myArgs = generateWords(int words)
+    // ^ easily test table's behavior by multiplexing Entry count
     File inFile = new File(IN_FILE);
     String[] myArgs = deserializeString(inFile).split("\\s+");
 
+    // deterministic method of setting up a nice hash table
+    // TODO: make dynamic, implementing rehash
     int BUCKET_NUM = (int) (myArgs.length / LOAD_FACTOR);
-
-
     List<List<Entry>> hashTable = new ArrayList<>(BUCKET_NUM);
 
     // bug: there are no elements in hashTable yet to iterate over
@@ -40,40 +43,34 @@ public class HashStrings {
     }
     */
 
+    // no bug! initialize 'bucket' references and add them to the hash table
     for (int i = 0; i < BUCKET_NUM; i++) {
       List<Entry> chain = new LinkedList<>();
       hashTable.add(chain);
     }
 
+    // add each unique String to the hash table
     for (String s : myArgs) {
       int hashCode = hashCode(s);
-      hashCode = compressionFunction(hashCode, BUCKET_NUM);
+      int bucketIndex = compressionFunction(hashCode, BUCKET_NUM);
 
-      Entry e = new Entry(s, Integer.toString(hashCode));
+      // entries simply comprised of String key and their bucketIndex
+      Entry e = new Entry(s, Integer.toString(bucketIndex));
 
+      // was on the lookout for duplicates, since they weren't deduping
+      // bug was, String logical equivalence isn't achieved by ==, but by String's equals() method
       if (s.equals("and")) {
         boolean duplicateCandidate = true;
       }
 
-      List<Entry> bucket = hashTable.get(hashCode);
+      // fetch da bucket!
+      List<Entry> bucket = hashTable.get(bucketIndex);
       if (! (bucket.contains(e))) {
         bucket.add(e);
       }
     }
 
     printTable(hashTable);
-
-    /*
-    for (List<Entry> chain : hashTable) {
-      System.out.println("chain of length " + chain.size());
-
-      for (Entry e : chain) {
-        System.out.print("  key " + "\"" + e.getKey() + "\"");
-        System.out.println(" hashed to " + e.getVal());
-      }
-
-    }
-    */
   }
 
   // as mentioned in the first ~10 minutes
@@ -92,7 +89,11 @@ public class HashStrings {
     return hashCode % BUCKET_NUM;
   }
 
-
+  // prints "bucket <bucketIndex> <bucketSize> <bucketContents>"
+  // <bucketIndex> is space-padded for column alignment
+  // at end, prints min and max values of <bucketSize>
+  // TODO: feeling ocd? how about just like you should abide by DRY? then pull out padding and apply to <bucketSize> as well
+  // TODO: pull out more logic!! ugh. Should a display function really be responsible for determining min, max stats?
   private static void printTable(List<List<Entry>> hashTable) {
     int minSize = Integer.MAX_VALUE;
     int maxSize = Integer.MIN_VALUE;
@@ -106,6 +107,7 @@ public class HashStrings {
     int maxBucketStrLength = (int) (Math.log10(hashTable.size())) + 1;
     //System.out.println("maxBucketStrLength = " + maxBucketStrLength);
 
+    // print the buckets, finally
     for(int i = 0; i < hashTable.size(); i++) {
       int bucketStrLength = (i == 0) ? 1 : (int) (Math.log10(i)) + 1;
       int paddingLength = maxBucketStrLength - bucketStrLength;
@@ -133,11 +135,13 @@ public class HashStrings {
       printBucket(bucket);
     }
 
+    // TODO: pull out as a separate display function
     System.out.println();
     System.out.println("minBucketSize: " + minSize);
     System.out.println("maxBucketSize: " + maxSize);
   }
 
+  // prints bucket contents (Entries -> key; doesn't print vals)
   private static void printBucket(List<Entry> bucket) {
     String closer = "";
     if (bucket.size() > 0) {
@@ -154,6 +158,7 @@ public class HashStrings {
   }
 
   // from http://www.java2s.com/Tutorial/Java/0180__File/LoadatextfilecontentsasaString.htm
+  // a quick way to fetch all a File's contents as a String
   private static String deserializeString(File file) throws IOException {
     int len;
     char[] chr = new char[4096];

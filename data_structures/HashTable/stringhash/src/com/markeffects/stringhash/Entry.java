@@ -2,7 +2,7 @@ package com.markeffects.stringhash;
 
 /**
  * Mark Bank
- * description
+ * simple String-based hash table entry class
  * markbank@markeffects.com
  * 1/30/2016
  */
@@ -18,7 +18,6 @@ class Entry {
   public String getKey() {
     return key;
   }
-
   public String getVal() {
     return val;
   }
@@ -28,13 +27,11 @@ class Entry {
     if (!(obj instanceof Entry)) {
       return false;
     }
-
     if (obj == this) {
       return true;
     }
 
     Entry rhs = (Entry) obj;
-
     return ((this.key.equals(rhs.key)) && (this.val.equals(rhs.val)));
   }
 }
