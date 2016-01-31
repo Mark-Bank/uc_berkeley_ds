@@ -1,0 +1,22 @@
+Stacks
+
+  - operations
+
+    1 push an item onto its top   'push'
+
+    2 pop an item off of its top  'pop'   (returns that item)
+
+    3 examine its top item        'top'   (like pop, but still on stack)
+
+
+    - all should be O(1) time
+
+  - impl simply via singly-linked list
+
+
+  - stacks' simplicity can play in their favor
+    - leading to easier debugging
+    - leading to better understanding of the algorithm they're being used in
+      e.g. "I have an algo that checks if parentheses match..."
+        - "and it uses a list"  -> ???
+        - "and it uses a stack" -> impl much clearer

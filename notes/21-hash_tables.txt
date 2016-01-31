@@ -79,6 +79,13 @@ Hash tables
       - choice is dependent on application
 
 
+  - another solution is probing
+
+    - hop to either side of initial (& discovered full) bucket
+    - hop lengths increase until empty bucket found
+    - more sensitive to loosing its O(1), so load factor must be capped at more like 0.75
+
+
   - beware the possibility of references to objects in table where the references aren't managed by the table
     - musn't get crazy and modify it (at least not its key)
 
@@ -107,9 +114,6 @@ Hash table performace
 
     - ideal: map each key to a random bucket
       - evenly distribute entries amongst buckets
-
-
-Hash code
 
 
 Compression function
@@ -144,3 +148,58 @@ Compression function
       - the mod p operation scrambles the bits crafted by (a * hashCode + b) really well
       - mod N gets it into your table
       - N needn't be prime any longer, so that responsibility is relegated to an internal impl. detail
+
+
+A good String hash
+
+  static final int SMALL_PRIME = 127;
+  static final int LARGE_PRIME = 16908799;
+
+  private int hashCode(String key) {
+    int hashVal = 0;
+
+    for (char c : key.toCharArray()) {
+      hashVal = ( SMALL_PRIME * hashVal + c) % LARGE_PRIME;
+    }
+
+    return hashVal;
+  }
+
+
+Bad String hashes ******see lect 22 09:00 - 19:00******
+
+  1
+
+  2
+
+  3
+
+  4
+
+  5
+
+
+Resizing hash tables
+
+  - if load factor exceeds some constant, O(1) time lost
+
+  - typ. at least double the bucket count
+
+  - walk through old array and rehash all found entries
+    - hash function is now abbreviated by a larger #
+      therefore those bucket indices won't be valid for the keys they contain,
+      leading to table's inconsistency
+
+
+Hash tables rule because
+
+  - keys can be virtually anything, and values anything meaningfully associated with their key
+
+    e.g. tic-tac-toe game grid tree
+
+      - if paths converge (i.e. transpose), and each grid's game val is hashed by the grid,
+        then the transposition can be recognized and the value needn't be recomputed
+
+      - so minimax algo checks if grid is in table
+        - if yes, return score
+        - if no, recurse to determine score & store that in the table
