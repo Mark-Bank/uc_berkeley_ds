@@ -1,2 +1,6 @@
 *.class
 *.jar
+
+# intellij
+**/.idea/workspace.xml
+**/.idea/tasks.xml

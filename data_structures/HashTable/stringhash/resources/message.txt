@@ -1,0 +1,7 @@
+hello how are you doing today
+I am quite well and I would like to explain
+that this HashTable implementation is here for
+simple demo purposes and for a refresher on
+writing code in java especially with regard
+to collections and generics and file io
+and primitive typecasting
