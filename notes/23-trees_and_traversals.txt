@@ -1,0 +1,188 @@
+Rooted trees
+
+  - tree: set of nodes and edges connecting them
+    - no cycles; exactly 1 path btwn any 2 nodes
+
+  - 'rooted' tree: a particular note is designated the 'root'
+
+  - every node c, except root, has 1 parent p
+    - p is the first node on the path leading from c to the root
+
+  - root has no parent
+
+  - leaf has no children
+
+  - general rooted trees -> node can have any # of children
+
+  - siblings have same parent
+
+  - ancestors of a node d - all nodes on path from d to root
+
+  - if a is an ancestor of d, d is a descendant of a
+
+  - length of path   - number of edges in path (0 for path of 1 node)
+
+  - depth of node n  - length of path from n to root (root @ depth 0)
+
+  - height of node n - length of path from n to its deepest descendent
+
+  - height of a tree - height of the root
+
+  - subtree rooted at a node n - the tree formed by n and all its descendents
+
+  - binary tree
+    - no node has children > 2
+    - every child is either 'left' or 'right' (even if no siblings)
+
+
+Representing rooted trees
+
+  1 each node has 3 references
+    - item
+    - parent
+    - children (a list structure)
+
+  2 "" but
+    - siblings are directly linked
+
+    - data structure:
+
+      class SibTreeNode {
+        Object item;
+        SibTreeNode parent;
+        SibTreeNode firstChild;
+        SibTreeNode nextSibling;
+      }
+
+      public class SibTree {
+        SibTreeNode root;
+        int size;               // number of nodes
+        int height;             // sometimes
+      }
+
+
+Tree traversals
+
+  - manner of visiting each node in a tree once
+
+  - types
+
+    - preorder traversal
+      1 visit node (initially, root)
+      2 recursively visit node's children
+
+      - more convenient to define on SibTreeNode class, as it visits nodes
+
+        class SibTreeNode {
+          public void preorder() {
+            this.visit();             // per application basis (Hey, what about a strategy pattern, eh???)
+            if (firstChild != null) {
+              firstChild.preorder();
+            }
+            if (nextSibling != null) {
+              nextSibling.preorder();
+            }
+          }
+        }
+
+
+      - order:
+
+           1
+         /   \
+        2     6
+       /|\   / \
+      3 4 5 7   8
+
+
+      - time
+
+        - each visited once -> O(1)
+        - all n nodes visited -> O(n)
+
+
+      - natural way to print out, say, a directory (incl. indent per depth)
+
+
+    - postorder traversal
+      1 recursively visit node's children (left-to-right)
+      2 visit node (initially, root)
+
+      - again, SibTreeNode class ideal
+
+        class SibTreeNode {
+          public void postOrder() {
+            if (firstChild != null) {
+              firstChild.postOrder();
+            }
+            this.visit();
+            if (nextSibling != null) {
+              nextSibling.postOrder();
+            }
+          }
+        }
+
+
+      - order:
+
+           8
+         /   \
+        4     7
+       /|\   / \
+      1 2 3 5   6
+
+
+      - time as preorder
+
+
+      - natural way to sum total diskspace of directories
+        - only leaves can be summed, as they contain summable file sizes
+      
+      - natural way to sum total diskspace of directories
+        - only leaves can be summed, as they contain summable file sizes
+        - after summing leaves, their parents can get summed, and so forth  - after summing leaves, their parents can get summed, and so forth
+
+
+    - inorder traversal (binary tree only)
+      1 recursively visit left child
+      2 visit node
+      3 recursively visit right child
+
+
+    - level-order traversal
+      1 visit root
+      2 visit all depth-1 nodes (left-right)
+      3 visit all depth-2 nodes (left-right)
+      4 and so forth
+
+      - not naturally recursive
+
+      - queue
+        - list
+        - enqueue: add  items to   end
+        - dequeue: take items from start
+
+      - method
+        1 use queue, first containing root only
+        2 dequeue a node
+        3 visit dequeued node
+        4 enqueue its children left-right (if it has any)
+        5 loop until queue is empty 
+
+
+  - summing expression tree
+    e.g.
+
+         +
+       /   \
+      *     ^
+     /\     /\
+    3  7   4  2
+
+    - inorder:     3 * 7 + 4 ^ 2 (human readable)
+    - preorder:    + * 3 7 ^ 4 2 (mmm, lisp. aka more computer legible)
+    - postorder:   3 7 * 4 2 ^ + (again, more computer legible)
+
+    - computer readability
+      - both pre and post only have 1 way to parse such expressions
+      - inorder requires precedent rules us humans memorize to disambiguate ordering
