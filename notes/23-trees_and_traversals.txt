@@ -140,7 +140,7 @@ Tree traversals
       
       - natural way to sum total diskspace of directories
         - only leaves can be summed, as they contain summable file sizes
-        - after summing leaves, their parents can get summed, and so forth  - after summing leaves, their parents can get summed, and so forth
+        - after summing leaves, their parents can get summed, and so forth
 
 
     - inorder traversal (binary tree only)
