@@ -1,0 +1,159 @@
+Priority queue
+
+  - ADT
+  - entries consist of key and value, like dictionaries
+  - however, they use keys for total ordering, not value lookup
+
+  - three main operations
+    1 remove entry with smallest key
+      - typically the only one you remove
+      - at least, it's the only one guaranteed to have quick identification / removal
+    2 any key may be inserted at any time
+    3 peek at entry with smallest key
+
+  - commonly used as event queues in simulations
+    - key is the time the event takes place
+    - value is the event description
+    - thereby allowing the
+      - time-based processing of events
+      - creation of future events resultant of past events
+
+
+Binary heap
+
+  - an implementation of the ADT, priority queue
+
+  - a complete binary tree
+    - a tree in which every level of the tree is full, except possibly bottom level
+    - bottom level is filled in left-right
+
+  e.g.
+                                   0 1 2 3 4 5  6 7  8  9 10
+               2                  [X,2,5,3,9,6,11,4,17,10, 8]
+          /         \
+         5           3
+      /     \      /   \ 
+     9       6   11     4
+    / \     /
+  17   10  8
+
+
+  - "heap order property" satisfied by entries
+    - no child has a key less than its parent's key
+
+  - "cool other property" satisfied by entries
+    - all subtrees of binary heap are also binary heaps
+
+  - often stored as arrays of entries
+
+    - order is by level-order traversal
+    - called "level numbering"
+
+    - 0th entry is skipped
+
+    - node i's children: 2i, 2i+1
+    - node i's parent: i/2 (round down)
+
+    - by tracking size, knowledge of last item's location maintained (n -> nth)
+
+    - two means of storing the 2 variables (k,v)
+      1 use two arrays (1 for k, 1 for v)
+      2 store an Entry data structure containing fields for both k, v
+
+  operation implementations
+
+    1 Entry min();
+
+      return entry at root
+
+    2 Entry insert(Object k, Object v);
+
+      let x be new entry (k,v)
+
+      place x in bottom level of tree at first free spot from left
+        i.e. first free location in array
+        (if bottom level is full, start new level & place at far left)
+
+      x's location may violate heap order property
+
+        BUBBLE UP!
+
+        x must bubble up tree until heap order property is satisfied
+        repeat:
+          let p = x's parent
+          if x.k < p.k
+            exchange(x, p)
+          else
+            terminate
+
+    3 Entry removeMin();
+
+      remove entry at root
+      save said entry for return value
+
+      replace root with last entry in tree, x
+
+      x's location almost certainly violates h.o.p.
+
+        BUBBLE DOWN!
+
+        x must bubble down tree until h.o.p. is satisfied
+        repeat:
+          let minC = min(x.c1, x.c2)
+          if x > minC
+            exchange(x, minC)
+          else
+            terminate
+
+
+Bubble down explanation
+
+  - all subtrees are binary heaps
+    therefore, when root is replaced by bottom-most entry,
+    the subtrees rooted at the new root's children are binary heaps
+
+    - so to determine the "proper" root,
+      just make sure the root becomes the min of r' and its children
+
+      - if that required a swap,
+        bubble down recursively
+
+        - the new binary heap under consideration is the subtree
+          whose root bubbled up
+
+
+Running times of priority queue implementations
+
+                   |  binary_heap | sorted_list | unsorted_list
+    ---------------|--------------|-------------|---------------
+           min()   | THETA(1)     | THETA(1)    | THETA(n)
+                   |              |             |
+    insert()       |              |             |
+      worst-case   | THETA(log n) | THETA(n)    | THETA(1)
+       best-case   | THETA(1)     | THETA(1)    | THETA(1)
+                   |              |             |
+     removeMin()   |              |             |
+      worst-case   | THETA(log n) | THETA(1)    | THETA(n)
+       best-case   | THETA(1)     | THETA(1)    | THETA(n)
+
+
+Bottom-up heap construction
+
+  - input:  unsorted collection of entries
+  - output: binary heap containing entries
+
+  - methods
+
+    - naive
+      1 insert each 1-by-1
+
+      - each insertion can take THETA(log n) time
+        -> THETA(n log n) time
+
+    - void bottomUpHeap();
+      1 build complete tree out of entries in any order
+      2 walk backward from last internal node to root
+        i.e. reverse order in array
+      3 when visiting a node, bubble it down recursively
+
+      - runtime = THETA(n)
