@@ -1,0 +1,97 @@
+Ordered dictionary
+
+  - ADT
+
+  - dictionary in which keys have a total order
+    - as heap, but with hash table operations (reasonably quickly)
+
+      - insert, find, remove entries (not as fast as hash table)
+      - find entry with min or max key
+      - find entry nearest to another entry
+        - can do "inexact" matches (MOST POWERFUL FEATURE)
+          e.g. could look up word with knowledge of only first 3 characters
+
+
+  - can have left OR right children (or both)
+
+  - binary search tree invariant satisfied
+    - for any node x, every key in
+      1 left  subtree of x is <= to x's key
+      2 right subtree of x is >= to x's key
+
+
+  - inorder traversal of b.s.t. visits nodes in sorted order
+    1 recursively inorder traverse left  child's subtree (if exists)
+    2 visit self
+    3 recursively inorder traverse right child's subtree (if exists)
+
+
+Binary search tree operations
+
+  - Entry find(Object k);
+    - see code in ../data_structures/BinarySearchTree
+
+    - not particularly interesting, as this is just a worse version of a hash table's find
+
+    - when searching down tree for a key k that's not in the tree,
+      there are 2 keys that will almost certainly be encountered
+
+      1 a node will contain smallest key > k iff any key > k
+
+      2 a node will contain largest  key < k iff any key < k
+
+    - simply track those nodes to get the bounds of the sought k
+
+  - Entry first();
+    - just fly down left as far as you can
+
+  - Entry last();
+    - just fly down righ tas far as you can
+
+  - Entry insert(Object k, Object v);
+    - follow same path through tree as find()
+    - once next step would lead to a null,
+      replace that reference with a new node
+      containing a new Entry(k,v)
+
+    - given duplicate keys allowed,
+      find() would stop if it found a node with key k,
+      so insert() needs to arbitrarily choose a child
+      to continue traversing via
+
+  - Entry remove(Object k);
+    find() node n with key k (returning null if n does not exist)
+
+    switch(n.childCount)
+    case 0:
+      remove n from its parent
+
+    case 1:
+      exchange n's parent's reference to n with n's child
+
+    case 2:
+      let x be node in n's right subtree with smallest k  --> x = first(n.right)
+      save x's key
+      replace x with x's right child (x has no left child)
+      replace n's key with x's key
+
+
+Running time
+
+  - quite dependent on balance of tree
+
+    e.g. perfectly balanced
+      - depth     d
+      - nodecount 2^(d+1) - 1
+
+      -> no node has depth > log n
+
+      - insert, find, remove
+        - running times proportional to depth of deepest visited node
+
+    e.g. perfectly imbalanced
+      - depth     d
+      - nodecount d
+
+      -insert, find, remove
+        - running times proportional to THETA(n)
