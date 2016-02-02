@@ -1,0 +1,150 @@
+2-3-4 trees
+
+  - perfectly balanced tree
+  - find, insert, remove in worst-case O(log n) time
+
+  - every node has 2, 3, or 4 children, except leaves
+  - leaves all occur at bottom level
+
+  - every node stores 1, 2, or 3 entries
+    - childcount = entries + 1, or 0 if leaf node
+
+  - keys are placed in sub-trees as per binary search trees
+    - difference is plurality of keys stored per node (no longer binary)
+
+  - an inorder travesal yields numbers in sorted order
+
+  - == b-trees of order 4
+
+  - equivalent to red-black trees
+
+  * algorithms mentioned are for "top-down",
+    not "bottom-up" 2-3-4 trees
+
+    - b-trees prefer top-down, as less traversing required
+
+
+2-3-4 tree operations
+
+  - Object find(Object k);
+    find which keys of root k fits between
+    when found, travel to that child's subtree
+
+  - void insert(Object k, Object v);
+    attempt to find k
+
+    if found, insert it to left child of found position
+      e.g. insert(50) on [20 40 50]
+                        /   |  |   \
+                              [50]
+
+    if not found, insert it where search terminated
+      - would be at a leaf node
+      - issue if leaf is full
+      - hence, ....
+    whenever insert() encounters a 3-key node
+      - break it up by kicking middle key to node's parent
+      - parent must have room, since if it was full,
+        its middle key would have already been kicked up
+
+        e.g.
+                            [20]
+                           /    \
+          visit: [10 11 12]      [30] 
+
+
+          ->          [11 20]
+                     /   |   \
+                 [10]   [12]  [30]
+
+        if root in violation,
+        must create new root node to enforce policy
+
+      - this ensures 2 things
+        1 there's room for a new key in leaf
+        2 there's room for any key that's kicked upstairs
+
+      - will only increase depth of tree if root is kicked up
+
+  - Object remove(Object k);
+    attempt to find k
+    if not found, return null
+
+    if k in leaf, remove it and return it
+
+    if k in internal node,
+      replace it with entry of next highest key
+      - next higher key is always in leaf node due to
+        2-3-4 tree's structuring
+      - if the entry of the next highest key was the only key of that node,
+        everything would be screwed up
+      - necessitates logic while walking down tree
+
+    eliminate 1-key nodes (except root) while walking down
+    to enable safely fetching next highest key to replace removed key
+
+      - remove() encounters 1-key node except root:
+
+        1) try to steal key from an adjacent sibling
+
+        'rotation' operation
+
+        e.g. visiting [30]
+
+                            [20 40]
+                           /   |   \
+                       [10]   [30]  [50 51 52]
+                                   /
+                                subtree
+
+
+          ->                [20 50]
+                           /   |   \
+                       [10] [30 40] [51 52]
+                                   \
+                                 subtree
+
+  
+        can affect children
+          must shift subtrees appropriately
+          as per example works, given 2-3-4 tree's invariant
+
+
+        2) no adjacent sibling has > 1 key,
+           steal key from parent
+
+        'fusion' operation
+
+        parent (unless root) must have >= 2 keys
+
+
+        3) parent is root and
+           root contains only 1 key and
+           sibling has only 1 key
+
+        fuse into 3-key node (the new root)
+        the depth of the tree decrements
+
+
+    - see 39:00 for example of remove()
+
+
+Running times
+
+  - a 2-3-4 tree with depth d,
+    has between 2^d and 4^d leaves
+
+  - nodecount of whole tree >= 2^(d+1) - 1
+    -> d elOf O(log n)
+
+  - each operation {find, insert, remove} have
+    worst-case running times O(d) == O(log n)
+
+    - much better than binary search tree's
+      worst-case running time of THETA(n)
+
+
+Alternative general strategy for duplicate keys
+
+    - collect all entries that share common key in 1 node
+      -> each node's entry = list of entries
